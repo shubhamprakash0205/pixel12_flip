@@ -1,72 +1,60 @@
-# Learning Image Flipping with a Deep Convolutional Neural Network
+# Probing Spatial Information Propagation in Deep Convolutional Architectures Through Horizontal Image Flipping
 
 ### Overview
 
 This project explores whether a Convolutional Neural Network (CNN) can learn a deterministic spatial transformation — horizontal image flipping — directly from image pairs.
-Instead of explicitly applying a horizontal flip during inference, the objective is to train a neural network to learn the mapping:
-Input Image  →  CNN  →  Horizontally Flipped Image
-The project was developed as an experiment to understand information propagation, receptive fields, deep convolutional architectures, and pixel-level image reconstruction.
+
+Although this transformation is simple to implement algorithmically, learning it using a CNN is an interesting problem because information from one side of the image must influence output pixels on the opposite side.
+The main question explored in this project is:
+Can a customized deep convolutional network which processes the 3 color channels separately learn a global spatial transformation when its receptive field covers the entire input image?
 
 ### Project Objective
+The project was developed as an experiment to understand information propagation, receptive fields, deep convolutional architectures, and pixel-level image reconstruction.
 
 A horizontal flip mathematically maps an input pixel at position:
 
-(x, y)
+(x, y) to: (x, W - 1 - y)
 
-to:
+where W is the image width , also assuming python indexing starting from 0 .
 
-(x, W - 1 - y)
-
-where W is the image width.
-
-Although this transformation is simple to implement algorithmically, learning it using a CNN is an interesting problem because information from one side of the image must influence output pixels on the opposite side.
-
-The main question explored in this project is:
-
-Can a standard deep convolutional network learn a global spatial transformation when its receptive field covers the entire input image?
 
 ### Initial Experiment
 
 The first version of the model used:
 
-7 convolutional layers
-3 × 3 convolution kernels
-Large input images
-Separate processing of Red, Green, and Blue channels
+- 7 convolutional layers
+- 3 × 3 convolution kernels
+- Large input images
+- Separate processing of Red, Green, and Blue channels
 
 The output images appeared blurred and showed only limited signs of spatial movement.
-
 One major limitation was the network's receptive field.
-
 For 7 convolutional layers using 3 × 3 kernels with stride 1, the theoretical receptive field is:
-
-1 + 7 × (3 - 1) = 15
-
+1 + 7 × (3 - 1) = 15  
 Therefore, an output neuron could only receive information from approximately a 15 × 15 region of the original image.
 
 This made it impossible for pixels on one side of a large image to influence pixels on the opposite side.
 
-Updated Architecture
+### Updated Architecture
 
 To increase the receptive field, the architecture was redesigned.
 
-Current Configuration
-Input image size: 32 × 32
-12 convolutional layers
-Kernel size: 7 × 7
-Stride: 1
-Padding: 3
-Hidden feature channels: 7
-Activation: LeakyReLU
-Final activation: Sigmoid
-Loss function: Mean Squared Error (MSE)
-Optimizer: Adam
-Learning rate: 1e-4
+Current Configuration:
+- Input image size: 32 × 32
+- 12 convolutional layers
+- Kernel size: 7 × 7
+- Stride: 1
+- Padding: 3
+- Hidden feature channels: 7
+- Activation: LeakyReLU
+- Final activation: Sigmoid
+- Loss function: Mean Squared Error (MSE)
+- Optimizer: Adam
+- Learning rate: 1e-4
 
 The network processes the Red, Green, and Blue channels through separate convolutional paths.
 ### Architecture 
 ![Architecture](files/architecture.png)
-
 
 ### Receptive Field
 
@@ -104,7 +92,7 @@ The model is trained using image pairs generated dynamically.
 
 For every input image:
 
-Input  = Original Image
+Input  = Original Image processed from the classic CIFAR-10 dataset.  
 Target = Horizontally Flipped Image
 
 The target is generated using TorchVision:
@@ -117,9 +105,7 @@ Images are converted to tensors using:
 
 transforms.ToTensor()
 
-which scales pixel values to the range:
-
-[0, 1]
+which scales pixel values to the range: [0, 1]
 
 
 ### Loss Function
@@ -131,32 +117,23 @@ nn.MSELoss()
 The loss measures the pixel-wise difference between the predicted image and the actual horizontally flipped image.
 
 Conceptually:
-
+```text
 Predicted Pixel ─┐
                  ├── Squared Difference → Average → Loss
 Target Pixel ────┘
-
+```
 A lower loss indicates that the predicted image is becoming closer to the expected flipped image.
 
-### Output Activation
+Below is the loss curve after we trained up to 2116 epochs.The model was trained with learning rate of 1e-4 which was reduced to 1e-5 after the losses were oscillating.
 
-The final convolutional layer produces one channel for each independent RGB path.
-
-A Sigmoid activation is applied to the final output:
-
-nn.Sigmoid()
-
-This constrains predicted pixel values to:
-
-0 ≤ output ≤ 1
-
-matching the range of images produced by ToTensor().
-
+![Loss_curve](files/loss_curve.png)
 ### Feature Map Visualization
 
-The project includes a custom visualization pipeline for inspecting intermediate convolutional feature maps.
-
-Intermediate outputs from different layers and feature channels can be visualized using Matplotlib.
+The project includes a custom visualization pipeline for inspecting intermediate convolutional feature maps.  
+Below are the feature maps visualized from layers 1 to 12 for the epoch count 2116 .
+![Feature1](files/feature1.png)
+![Feature2](files/feature2.png)
+![Feature3](files/feature3.png)
 
 This was used to study:
 
@@ -165,58 +142,52 @@ How individual filters transform image features
 Whether spatial information moves across the feature maps
 How deeper layers represent the input image
 
-### Model Checkpointing
-
-The training state is periodically saved using PyTorch checkpoints.
-
-The checkpoint stores:
-
-Model parameters
-Optimizer state
-Epoch count
-Training loss
-
-This allows training to continue from the previously saved state instead of restarting from randomly initialized weights.
-
 ### Technologies Used
-Python
-PyTorch
-TorchVision
-NumPy
-Pillow (PIL)
-Matplotlib
+- Python
+- PyTorch
+- TorchVision
+- NumPy
+- Pillow (PIL)
+- Matplotlib
 
 
 ### Key Concepts Explored
 
 This project helped explore and understand:
 
-Convolutional neural networks
-Receptive fields
-Spatial information propagation
-Image-to-image learning
-Pixel-level reconstruction
-Deep CNN architecture design
-Large convolution kernels
-LeakyReLU activation
-Sigmoid output activation
-Mean Squared Error loss
-Feature map visualization
-Model checkpointing
-GPU-based model training
+- Convolutional neural networks
+- Receptive fields
+- Spatial information propagation
+- Image-to-image learning
+- Pixel-level reconstruction
+- Deep CNN architecture design
+- Large convolution kernels
+- LeakyReLU activation
+- Sigmoid output activation
+- Mean Squared Error loss
+- Feature map visualization
+- Model checkpointing
+- GPU-based model training
+### RESULTS 
+Here are some original input images  and their final flipped image generated with the model.
+The results shown below are for the epoch count 2116 , where the loss was coming around 0.0112  
 
+![result1](files/result_images/65.png)
+![result2](files/result_images/870.png)
+![result3](files/result_images/911.png)
+![result3](files/result_images/6589.png)
+![result3](files/result_images/43211.png)
 ### Experimental Observations
 
 The initial 7-layer architecture with 3 × 3 kernels produced blurred outputs and struggled to perform the required spatial transformation.
 
-The experiment suggested that the limited receptive field prevented distant image regions from communicating.
+The experiment suggested that the pixel information from one end couldn't be carried up to another end with that architecture.
 
 The architecture was therefore expanded to 12 layers with 7 × 7 kernels and the dataset images were changed to 32 × 32 resolution.
 
 The updated model provides a theoretical receptive field larger than the complete input image.
 
-The current experiment investigates whether having complete theoretical receptive-field coverage is sufficient for a standard CNN to learn an exact spatial permutation such as horizontal flipping.
-
+With this updated architecture it looked like the model is preserving the shapes like cars remain cars, dogs remain dogs. shapes can be observed also its looks like the images are getting flipped but it is lacking detailing too much. also the edges are not sharp and it can be observed that AI effect in the generated images due to MSE loss most probably
 ### Limitations
 
 The current architecture processes the Red, Green, and Blue channels independently.
@@ -231,16 +202,16 @@ Theoretical receptive-field coverage only guarantees that information can propag
 
 Future versions of this project may explore:
 
-Joint RGB convolution using multi-channel kernels
-Dilated convolutions
-Encoder-decoder architectures
-Skip connections
-Residual connections
-Self-attention
-Vision Transformer-based spatial transformations
-Comparison of MSE and L1 loss
-Effective receptive field analysis
-Comparison between theoretical and learned information propagation
+- Joint RGB convolution using multi-channel kernels
+- Dilated convolutions
+- Encoder-decoder architectures
+- Skip connections
+- Residual connections
+- Self-attention
+- Vision Transformer-based spatial transformations
+- Comparison of MSE and L1 loss
+- Effective receptive field analysis
+- Comparison between theoretical and learned information propagation
 
 ### Why This Project?
 
@@ -256,7 +227,7 @@ How does spatial information propagate through a deep convolutional neural netwo
 
 #### Shubham Prakash
 
-B.Tech Electrical Engineering
+B.Tech Electrical Engineering  
 National Institute of Technology Srinagar
 
 Interested in Deep Learning, Computer Vision, and understanding neural networks from first principles.
