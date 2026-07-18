@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this project in your research or educational work, please cite it using the metadata below."
+
+title: "Probing Spatial Information Propagation in Deep CNNs Using Horizontal Image Flipping"
+
+type: software
+
+authors:
+  - family-names: "Prakash"
+    given-names: "Shubham"
+    orcid: "https://orcid.org/0009-0004-6406-0253"
+
+version: "1.0.0"
+
+date-released: 2026-07-19
+
+license: "GPL-3.0"
+
+repository-code: "https://github.com/shubhamprakash0205/pixel12_flip"
+
+abstract: >
+  This project investigates whether a deep convolutional neural network
+  can learn a deterministic global spatial transformation—horizontal image
+  flipping—through supervised learning. The work explores receptive fields,
+  spatial information propagation, feature visualization, and pixel-level
+  image reconstruction using a custom 12-layer CNN implemented in PyTorch.
+
+keywords:
+  - Deep Learning
+  - Convolutional Neural Networks
+  - Computer Vision
+  - Image-to-Image Translation
+  - Spatial Information Propagation
+  - Receptive Field
+  - Horizontal Image Flipping
+  - PyTorch
+  - Feature Visualization
+  - CIFAR-10
