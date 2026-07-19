@@ -188,7 +188,7 @@ The architecture was therefore expanded to 12 layers with 7 × 7 kernels and the
 
 The updated model provides a theoretical receptive field larger than the complete input image.
 
-With this updated architecture it looked like the model is preserving the shapes like cars remain cars, dogs remain dogs. shapes can be observed also its looks like the images are getting flipped but it is lacking detailing too much. also the edges are not sharp and it can be observed that AI effect in the generated images due to MSE loss most probably
+With this updated architecture it looked like the model is preserving the semantic structure so shapes like cars remain cars, dogs remain dogs. It has not learned a precise pixel-wise geometric transformation but it is producing a blurry reconstruction of what a flipped object should look like. Shapes can be observed  but it is lacking detailing too much. also the edges are not sharp and it posses the AI effect or dream-like appearance in the generated images due to MSE loss most probably.
 ## Limitations
 
 The current architecture processes the Red, Green, and Blue channels independently.
