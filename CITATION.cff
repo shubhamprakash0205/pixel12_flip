@@ -11,9 +11,8 @@ authors:
     orcid: "https://orcid.org/0009-0004-6406-0253"
 
 version: "1.0.0"
-
+doi: 10.5281/zenodo.21438967
 date-released: 2026-07-19
-
 license: "GPL-3.0"
 
 repository-code: "https://github.com/shubhamprakash0205/pixel12_flip"
@@ -23,7 +22,8 @@ abstract: >
   can learn a deterministic global spatial transformation—horizontal image
   flipping—through supervised learning. The work explores receptive fields,
   spatial information propagation, feature visualization, and pixel-level
-  image reconstruction using a custom 12-layer CNN implemented in PyTorch.
+  image reconstruction using a customized deep convolutional network which
+  processes the 3 color channels separately.
 
 keywords:
   - Deep Learning

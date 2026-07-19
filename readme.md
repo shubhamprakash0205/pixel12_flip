@@ -1,4 +1,5 @@
 # Probing Spatial Information Propagation in Deep Convolutional Architectures Through Horizontal Image Flipping
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21438967.svg)](https://doi.org/10.5281/zenodo.21438967)
 
 ## Overview
 
