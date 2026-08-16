@@ -15,7 +15,7 @@ input_transform = transforms.Compose([
 ])
 
 def predict(input_file_path):	
-	checkpoint = torch.load('files/result/flip_checkpoint_2116.pth',map_location=torch.device(device))
+	checkpoint = torch.load('files/result/flip_checkpoint (5).pth',map_location=torch.device(device))
 	state_dict = checkpoint['model_state_dict']
 	epoch_count = checkpoint['epoch_count']
 	print(epoch_count)
@@ -142,5 +142,5 @@ def predict(input_file_path):
 	
 	print(checkpoint['loss'])
 
-#65,870,6589,20589
+#65,870,6589,20589,43211
 predict('files/train_images/43211.jpg')

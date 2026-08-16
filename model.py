@@ -134,7 +134,7 @@ class sevenpixels(nn.Module):
 
 		
 	def forward(self,input_image):
-		#input_image = [1,3,h,w]
+		#input_image = [batch_size,3,h,w]
 		input_image_r = input_image[:,:1,:,:]
 		input_image_g = input_image[:,1:2,:,:]
 		input_image_b = input_image[:,2:3,:,:]
